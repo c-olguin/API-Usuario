@@ -17,6 +17,8 @@ func main() {
 
 	r.HandleFunc("/registrar", controllers.CrearUsuario).Methods("POST")
 	r.HandleFunc("/login", controllers.Login).Methods("POST")
+	
+	r.HandleFunc("/usuarios/todos", controllers.FetchUsers).Methods("GET")
 
 
 	corsOpts := cors.New(cors.Options{

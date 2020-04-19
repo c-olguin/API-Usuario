@@ -106,3 +106,17 @@ func FindOne(email, password string) map[string]interface{} {
 	resp["usuario"] = usuario
 	return resp
 }
+
+func FetchUsers(w http.ResponseWriter, r *http.Request) {
+	var usuarios []models.Usuario
+
+	db, err := config.BibliotecaDigitalDB()
+	if err != nil {
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+	//db.Preload("auths").Find(&usuarios) puede haber ususarios que no esten registrados?
+	db.Find(&usuarios)
+
+	json.NewEncoder(w).Encode(usuarios)
+}
