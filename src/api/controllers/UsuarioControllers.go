@@ -5,8 +5,9 @@ import (
 	"../config"
 	"encoding/json"
 	"fmt"
+	"time"
 	"net/http"
-
+	jwt "github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -50,6 +51,7 @@ func CrearUsuario(w http.ResponseWriter, r *http.Request) {
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Buscando usuario")
 	usuario := &models.Usuario{}
 	err := json.NewDecoder(r.Body).Decode(usuario)
 	if err != nil {
@@ -74,7 +76,7 @@ func FindOne(email, password string) map[string]interface{} {
 		var resp = map[string]interface{}{"status": false, "message": "Email address not found"}
 		return resp
 	}
-	// expiresAt := time.Now().Add(time.Minute * 100000).Unix()
+	expiresAt := time.Now().Add(time.Minute * 100000).Unix()
 
 	errf := bcrypt.CompareHashAndPassword([]byte(usuario.Password), []byte(password))
 	if errf != nil && errf == bcrypt.ErrMismatchedHashAndPassword { //Password does not match!
@@ -82,24 +84,25 @@ func FindOne(email, password string) map[string]interface{} {
 		return resp
 	}
 
-	// tk := &models.Token{
-	// 	UserID: user.ID,
-	// 	Name:   user.Name,
-	// 	Email:  user.Email,
-	// 	StandardClaims: &jwt.StandardClaims{
-	// 		ExpiresAt: expiresAt,
-	// 	},
-	// }
+	tk := &models.Token{
+		UserID: usuario.ID,
+		Name:   usuario.Nombre,
+		Email:  usuario.Email,
+		StandardClaims: &jwt.StandardClaims{
+			ExpiresAt: expiresAt,
+		},
+	}
 
-	// token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
+	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
 
-	// tokenString, error := token.SignedString([]byte("secret"))
-	// if error != nil {
-	// 	fmt.Println(error)
-	// }
+	tokenString, error := token.SignedString([]byte("secret"))
+	if error != nil {
+		fmt.Println(error)
+	}
 
-	var resp = map[string]interface{}{"status": false, "message": "logged in"}
-	// resp["token"] = tokenString //Store the token in the response
+	var resp = map[string]interface{}{"status": true, "message": "logged in"}
+	fmt.Println("Usuario Encontrado")
+	resp["token"] = tokenString //Guarda el token en la respuesta
 	resp["usuario"] = usuario
 	return resp
 }
