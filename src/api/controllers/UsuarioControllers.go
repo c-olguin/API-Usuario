@@ -1,12 +1,13 @@
 package controllers
 
 import (
-	"../models"
-	"../config"
 	"encoding/json"
 	"fmt"
-	"time"
 	"net/http"
+	"time"
+
+	"../config"
+	"../models"
 	jwt "github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -117,6 +118,34 @@ func FetchUsers(w http.ResponseWriter, r *http.Request) {
 	}
 	//db.Preload("auths").Find(&usuarios) puede haber ususarios que no esten registrados?
 	db.Find(&usuarios)
+
+	json.NewEncoder(w).Encode(usuarios)
+}
+
+func ObtenerProfesores(w http.ResponseWriter, r *http.Request) {
+	var usuarios []models.Usuario
+
+	db, err := config.BibliotecaDigitalDB()
+	if err != nil {
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+	//db.Preload("auths").Find(&usuarios) puede haber ususarios que no esten registrados?
+	db.Where("rol = ?", "profesor").Find(&usuarios)
+
+	json.NewEncoder(w).Encode(usuarios)
+}
+
+func ObtenerDirectores(w http.ResponseWriter, r *http.Request) {
+	var usuarios []models.Usuario
+
+	db, err := config.BibliotecaDigitalDB()
+	if err != nil {
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+	//db.Preload("auths").Find(&usuarios) puede haber ususarios que no esten registrados?
+	db.Where("rol = ?", "director").Find(&usuarios)
 
 	json.NewEncoder(w).Encode(usuarios)
 }

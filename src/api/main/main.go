@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-    "github.com/rs/cors"
+	"github.com/rs/cors"
 
 	"../controllers"
 	"github.com/gorilla/mux"
@@ -17,9 +17,10 @@ func main() {
 
 	r.HandleFunc("/registrar", controllers.CrearUsuario).Methods("POST")
 	r.HandleFunc("/login", controllers.Login).Methods("POST")
-	
-	r.HandleFunc("/usuarios/todos", controllers.FetchUsers).Methods("GET")
 
+	r.HandleFunc("/usuarios/todos", controllers.FetchUsers).Methods("GET")
+	r.HandleFunc("/usuarios/profesores", controllers.ObtenerProfesores).Methods("GET")
+	r.HandleFunc("/usuarios/directores", controllers.ObtenerDirectores).Methods("GET")
 
 	corsOpts := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"}, //you service is available and allowed for this base url
@@ -32,10 +33,10 @@ func main() {
 			http.MethodOptions,
 			http.MethodHead,
 		},
-	
+
 		AllowedHeaders: []string{
 			"*", //or you can your header key values which you are using in your application
-	
+
 		},
 	})
 
