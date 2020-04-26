@@ -3,12 +3,14 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
 	"../config"
 	"../models"
 	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/gorilla/mux"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -60,11 +62,11 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(resp)
 		return
 	}
-	resp := FindOne(usuario.Email, usuario.Password)
+	resp := findOne(usuario.Email, usuario.Password)
 	json.NewEncoder(w).Encode(resp)
 }
 
-func FindOne(email, password string) map[string]interface{} {
+func findOne(email, password string) map[string]interface{} {
 	usuario := &models.Usuario{}
 
 	db, err := config.BibliotecaDigitalDB()
@@ -108,7 +110,7 @@ func FindOne(email, password string) map[string]interface{} {
 	return resp
 }
 
-func FetchUsers(w http.ResponseWriter, r *http.Request) {
+func ObtenerUsuarios(w http.ResponseWriter, r *http.Request) {
 	var usuarios []models.Usuario
 
 	db, err := config.BibliotecaDigitalDB()
@@ -122,30 +124,23 @@ func FetchUsers(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(usuarios)
 }
 
-func ObtenerProfesores(w http.ResponseWriter, r *http.Request) {
-	var usuarios []models.Usuario
+func EliminarUsuario(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	id := params["id"]
 
 	db, err := config.BibliotecaDigitalDB()
 	if err != nil {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
-	//db.Preload("auths").Find(&usuarios) puede haber ususarios que no esten registrados?
-	db.Where("rol = ?", "profesor").Find(&usuarios)
 
-	json.NewEncoder(w).Encode(usuarios)
-}
-
-func ObtenerDirectores(w http.ResponseWriter, r *http.Request) {
-	var usuarios []models.Usuario
-
-	db, err := config.BibliotecaDigitalDB()
-	if err != nil {
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
-		return
+	res := db.Unscoped().Where("id = ?", id).Delete(models.Usuario{})
+	if res.Error != nil {
+		log.Println("Error al eliminar usuario", res.Error)
+		var resp = map[string]interface{}{"status": false, "message": "Invalid request"}
+		json.NewEncoder(w).Encode(resp)
 	}
-	//db.Preload("auths").Find(&usuarios) puede haber ususarios que no esten registrados?
-	db.Where("rol = ?", "director").Find(&usuarios)
 
-	json.NewEncoder(w).Encode(usuarios)
+	var resp = map[string]interface{}{"status": true, "message": "Usuario eliminado satisfactoriamente"}
+	json.NewEncoder(w).Encode(resp)
 }

@@ -18,9 +18,8 @@ func main() {
 	r.HandleFunc("/registrar", controllers.CrearUsuario).Methods("POST")
 	r.HandleFunc("/login", controllers.Login).Methods("POST")
 
-	r.HandleFunc("/usuarios/todos", controllers.FetchUsers).Methods("GET")
-	r.HandleFunc("/usuarios/profesores", controllers.ObtenerProfesores).Methods("GET")
-	r.HandleFunc("/usuarios/directores", controllers.ObtenerDirectores).Methods("GET")
+	r.HandleFunc("/usuarios", controllers.ObtenerUsuarios).Methods("GET")
+	r.HandleFunc("/usuarios/{id}", controllers.EliminarUsuario).Methods("DELETE")
 
 	corsOpts := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"}, //you service is available and allowed for this base url
