@@ -10,6 +10,7 @@ import (
 	"../config"
 	"../models"
 	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -63,6 +64,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	resp := findOne(usuario.Email, usuario.Password)
+	fmt.Println(resp)
 	json.NewEncoder(w).Encode(resp)
 }
 
@@ -75,7 +77,7 @@ func findOne(email, password string) map[string]interface{} {
 		return resp
 	}
 
-	if err := db.Where("Email = ?", email).First(usuario).Error; err != nil {
+	if err := db.Where("email = ?", email).First(usuario).Error; err != nil {
 		var resp = map[string]interface{}{"status": false, "message": "Email address not found"}
 		return resp
 	}
@@ -98,7 +100,7 @@ func findOne(email, password string) map[string]interface{} {
 
 	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
 
-	tokenString, error := token.SignedString([]byte("secret"))
+	tokenString, error := token.SignedString([]byte(uuid.NewString()))
 	if error != nil {
 		fmt.Println(error)
 	}
