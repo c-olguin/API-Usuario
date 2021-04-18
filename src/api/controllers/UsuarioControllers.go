@@ -33,7 +33,6 @@ func CrearUsuario(w http.ResponseWriter, r *http.Request) {
 
 	usuario := &models.Usuario{}
 	json.NewDecoder(r.Body).Decode(usuario)
-
 	pass, err := bcrypt.GenerateFromPassword([]byte(usuario.Password), bcrypt.DefaultCost)
 	if err != nil {
 		fmt.Println(err)
@@ -78,14 +77,14 @@ func findOne(email, password string) map[string]interface{} {
 	}
 
 	if err := db.Where("email = ?", email).First(usuario).Error; err != nil {
-		var resp = map[string]interface{}{"status": false, "message": "Email address not found"}
+		var resp = map[string]interface{}{"status": false, "message": "Direccion de correo electronico invalida"}
 		return resp
 	}
 	expiresAt := time.Now().Add(time.Minute * 100000).Unix()
 
 	errf := bcrypt.CompareHashAndPassword([]byte(usuario.Password), []byte(password))
 	if errf != nil && errf == bcrypt.ErrMismatchedHashAndPassword { //Password does not match!
-		var resp = map[string]interface{}{"status": false, "message": "Invalid login credentials. Please try again"}
+		var resp = map[string]interface{}{"status": false, "message": "Contraseña invalida. Por favor, reintente"}
 		return resp
 	}
 
@@ -105,7 +104,7 @@ func findOne(email, password string) map[string]interface{} {
 		fmt.Println(error)
 	}
 
-	var resp = map[string]interface{}{"status": true, "message": "logged in"}
+	var resp = map[string]interface{}{"status": true, "message": "Hola "+usuario.Nombre}
 	fmt.Println("Usuario Encontrado")
 	resp["token"] = tokenString //Guarda el token en la respuesta
 	resp["usuario"] = usuario
