@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"gorm.io/driver/mysql"
@@ -25,14 +26,26 @@ type DatabaseConfig struct {
 func getDataBaseSpecification() DatabaseConfig {
 	var databaseConfig DatabaseConfig
 
-	databaseConfig = DatabaseConfig{
-		Username:        "vinculacion",
-		Password:        "vinculacion3.0",
-		Hostname:        "db4free.net:3306",
-		Database:        "biblio_digital",
-		MaxIddleConn:    1,
-		MaxOpenConn:     3,
-		ConnMaxLifetime: time.Minute * 5,
+	if os.Getenv("ENVIRONMENT") == "production" {
+		databaseConfig = DatabaseConfig{
+			Username:        "vinculacion",
+			Password:        "vinculacion3.0",
+			Hostname:        "db4free.net:3306",
+			Database:        "biblio_digital",
+			MaxIddleConn:    1,
+			MaxOpenConn:     3,
+			ConnMaxLifetime: time.Minute * 5,
+		}
+	} else {
+		databaseConfig = DatabaseConfig{
+			Username:        "root",
+			Password:        "root",
+			Hostname:        "localhost:3306",
+			Database:        "biblio_digital",
+			MaxIddleConn:    1,
+			MaxOpenConn:     3,
+			ConnMaxLifetime: time.Minute * 5,
+		}
 	}
 
 	return databaseConfig

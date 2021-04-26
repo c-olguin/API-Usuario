@@ -16,7 +16,7 @@ func main() {
 	r.Use(CommonMiddleware)
 
 	r.HandleFunc("/registrar", controllers.CrearUsuario).Methods("POST")
-	r.HandleFunc("/login", controllers.Login).Methods("POST")
+	r.HandleFunc("/login", controllers.AutenticarUsuario).Methods("POST")
 
 	r.HandleFunc("/usuarios", controllers.ObtenerUsuarios).Methods("GET")
 	r.HandleFunc("/usuarios/{id}", controllers.EliminarUsuario).Methods("DELETE")
