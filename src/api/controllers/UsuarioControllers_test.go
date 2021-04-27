@@ -3,6 +3,7 @@ package controllers
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/tesis/API-Usuario/src/api/models"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -10,6 +11,43 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
 )
+
+func TestCrearUsuario(t *testing.T) {
+	router := mux.NewRouter()
+	router.HandleFunc("/usuarios/registrar", CrearUsuario).Methods("POST")
+
+	assert := assert.New(t)
+	bodyReq := models.Usuario{
+		Email:    "juancito@gmail.com",
+		Password: "Juancito1234",
+		Nombre: "Juan",
+		Apellido: "Fuentes",
+		Username: "jfuentes",
+		Especialidad: "ninguna",
+		InstitucionID: 1,
+		Imagen_url: "-",
+		Rol: "DIRECTOR",
+		Telefono: "2553543423",
+	}
+
+	b := new(bytes.Buffer)
+	json.NewEncoder(b).Encode(bodyReq)
+
+	req, err := http.NewRequest("POST", "/usuarios/registrar", b)
+	if err != nil {
+		t.Fatal("Creating POST, /usuarios/registrar request failed!")
+	}
+
+	respRec := httptest.NewRecorder()
+	router.ServeHTTP(respRec, req)
+
+	var resp models.Usuario
+	json.Unmarshal(respRec.Body.Bytes(), &resp)
+
+	assert.Equal(http.StatusOK, respRec.Code)
+	assert.Equal(bodyReq.Email, resp.Email)
+	assert.NotNil(resp.ID)
+}
 
 func TestAutenticarUsuario(t *testing.T) {
 	router := mux.NewRouter()
@@ -94,7 +132,7 @@ func TestAutenticarUsuarioUsuarioIncorrecto(t *testing.T) {
 	router.ServeHTTP(respRec, req)
 
 	var resp map[string]interface{}
-	json.Unmarshal(respRec.Body.Bytes(), &resp)
+	_ = json.Unmarshal(respRec.Body.Bytes(), &resp)
 
 	assert.Equal(http.StatusOK, respRec.Code)
 	assert.Equal("Email no encontrado. Error: record not found", resp["message"])

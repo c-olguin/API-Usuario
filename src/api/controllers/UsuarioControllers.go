@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"../models"
-	"../services"
 	"github.com/gorilla/mux"
+	"github.com/tesis/API-Usuario/src/api/models"
+	"github.com/tesis/API-Usuario/src/api/services"
 )
 
 type error interface {

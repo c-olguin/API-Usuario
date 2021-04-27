@@ -1,12 +1,12 @@
 package config
 
 import (
-	"../models"
 	"context"
 	"encoding/json"
+	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/tesis/API-Usuario/src/api/models"
 	"net/http"
 	"strings"
-	jwt "github.com/dgrijalva/jwt-go"
 )
 
 //Exception struct

@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"../models"
+	"github.com/tesis/API-Usuario/src/api/models"
 	"github.com/stretchr/testify/assert"
 )
 

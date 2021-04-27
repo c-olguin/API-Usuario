@@ -3,8 +3,8 @@ package dao
 import (
 	"fmt"
 
-	"../config"
-	"../models"
+	"github.com/tesis/API-Usuario/src/api/config"
+	"github.com/tesis/API-Usuario/src/api/models"
 )
 
 func ObtenerUsuario(email string) (models.Usuario, error) {

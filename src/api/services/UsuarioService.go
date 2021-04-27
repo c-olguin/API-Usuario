@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"../dao"
-	"../models"
+	"github.com/tesis/API-Usuario/src/api/dao"
+	"github.com/tesis/API-Usuario/src/api/models"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
