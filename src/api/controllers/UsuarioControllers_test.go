@@ -3,7 +3,7 @@ package controllers
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/tesis/API-Usuario/src/api/models"
+	"../models"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -135,6 +135,6 @@ func TestAutenticarUsuarioUsuarioIncorrecto(t *testing.T) {
 	_ = json.Unmarshal(respRec.Body.Bytes(), &resp)
 
 	assert.Equal(http.StatusOK, respRec.Code)
-	assert.Equal("Email no encontrado. Error: record not found", resp["message"])
+	assert.Equal("Email no encontrado.", resp["message"])
 	assert.False(resp["status"].(bool))
 }
