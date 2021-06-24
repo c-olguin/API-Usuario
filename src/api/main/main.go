@@ -19,6 +19,8 @@ func main() {
 	r.HandleFunc("/login", controllers.AutenticarUsuario).Methods("POST")
 
 	r.HandleFunc("/usuarios", controllers.ObtenerUsuarios).Methods("GET")
+	r.HandleFunc("/usuarios/{id}", controllers.ObtenerUsuario).Methods("GET")
+	r.HandleFunc("/usuarios/{id}", controllers.ModificarUsuario).Methods("PUT")
 	r.HandleFunc("/usuarios/{id}", controllers.EliminarUsuario).Methods("DELETE")
 
 	corsOpts := cors.New(cors.Options{

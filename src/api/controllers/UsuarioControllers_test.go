@@ -3,10 +3,11 @@ package controllers
 import (
 	"bytes"
 	"encoding/json"
-	"../models"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"../models"
 
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
@@ -18,16 +19,16 @@ func TestCrearUsuario(t *testing.T) {
 
 	assert := assert.New(t)
 	bodyReq := models.Usuario{
-		Email:    "juancito@gmail.com",
-		Password: "Juancito1234",
-		Nombre: "Juan",
-		Apellido: "Fuentes",
-		Username: "jfuentes",
-		Especialidad: "ninguna",
+		Email:         "juancito@gmail.com",
+		Password:      "Juancito1234",
+		Nombre:        "Juan",
+		Apellido:      "Fuentes",
+		Username:      "jfuentes",
+		Especialidad:  "ninguna",
 		InstitucionID: 1,
-		Imagen_url: "-",
-		Rol: "DIRECTOR",
-		Telefono: "2553543423",
+		Imagen_url:    "-",
+		Rol:           "DIRECTOR",
+		Telefono:      "2553543423",
 	}
 
 	b := new(bytes.Buffer)

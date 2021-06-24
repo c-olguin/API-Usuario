@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/tesis/API-Usuario/src/api/dao"
-	"github.com/tesis/API-Usuario/src/api/models"
+	"../dao"
+	"../models"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
@@ -69,6 +69,35 @@ func CrearUsuario(usuario models.Usuario) (models.Usuario, error) {
 
 	if usuario, err = dao.AltaUsuario(usuario); err != nil {
 		return usuario, err
+	}
+
+	return usuario, err
+}
+
+func ModificarUsuario(userID string, nuevosAtributos map[string]interface{}) (models.Usuario, error) {
+	var err error
+
+	fmt.Println("Ejecutando: ModificarUsuario")
+
+	usuario, err := dao.ModificarUsuario(userID, nuevosAtributos)
+	if err != nil {
+		fmt.Println("Error al modificar usuario", err)
+		return usuario, fmt.Errorf("Error al modificar usuario - ERROR: %v", err)
+	}
+
+	return usuario, err
+}
+
+func ObtenerUsuario(userID string) (models.Usuario, error) {
+	var err error
+	var usuario models.Usuario
+
+	fmt.Println("Ejecutando: ObtenerUsuario")
+
+	usuario, err = dao.ObtenerUsuarioPorID(userID)
+	if err != nil {
+		fmt.Println("Error buscando usuario", err)
+		return usuario, fmt.Errorf("Error buscando usuario - ERROR: %v", err)
 	}
 
 	return usuario, err

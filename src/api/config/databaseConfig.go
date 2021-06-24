@@ -39,7 +39,7 @@ func getDataBaseSpecification() DatabaseConfig {
 	} else {
 		databaseConfig = DatabaseConfig{
 			Username:        "root",
-			Password:        "",
+			Password:        "root",
 			Hostname:        "localhost:3306",
 			Database:        "biblio_digital",
 			MaxIddleConn:    1,
