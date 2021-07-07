@@ -26,17 +26,17 @@ type DatabaseConfig struct {
 func getDataBaseSpecification() DatabaseConfig {
 	var databaseConfig DatabaseConfig
 
-	if os.Getenv("ENVIRONMENT") == "production" {
+	//if os.Getenv("ENVIRONMENT") == "production" {
 		databaseConfig = DatabaseConfig{
-			Username:        "vinculacion",
-			Password:        "vinculacion3.0",
-			Hostname:        "db4free.net:3306",
-			Database:        "biblio_digital",
+			Username:        "root",
+			Password:        "Vinculacion3.0",
+			Hostname:        "190.122.229.53:3306",
+			Database:        "VEDB",
 			MaxIddleConn:    1,
 			MaxOpenConn:     3,
 			ConnMaxLifetime: time.Minute * 5,
 		}
-	} else {
+	/*} else {
 		databaseConfig = DatabaseConfig{
 			Username:        "root",
 			Password:        "root",
@@ -46,7 +46,7 @@ func getDataBaseSpecification() DatabaseConfig {
 			MaxOpenConn:     3,
 			ConnMaxLifetime: time.Minute * 5,
 		}
-	}
+	}*/
 
 	return databaseConfig
 }
