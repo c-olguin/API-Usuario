@@ -23,7 +23,7 @@ func AutenticarUsuario(email, password string) map[string]interface{} {
 	expiresAt := time.Now().Add(time.Minute * 3600).Unix()
 
 	errf := bcrypt.CompareHashAndPassword([]byte(usuario.Password), []byte(password))
-	if errf != nil && errf == bcrypt.ErrMismatchedHashAndPassword { //Password does not match!
+	if errf != nil { //Password does not match!
 		var resp = map[string]interface{}{"status": false, "message": "Contraseña incorrecta. Intente nuevamente"}
 		return resp
 	}
